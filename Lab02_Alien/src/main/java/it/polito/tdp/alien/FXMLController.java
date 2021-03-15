@@ -32,6 +32,7 @@ public class FXMLController
 		model.reset();
 		
 		textArea.setText("DATABASE RESETTATO!"); 
+		txtInput.clear();
 	}
 
 	@FXML
@@ -50,9 +51,9 @@ public class FXMLController
 			
 			if(sub.length == 2 && !sub[0].equals("") && !sub[1].equals(""))
 			{
-				model.addWord(sub[0], sub[1]);
+				model.addWord(sub[0].toUpperCase(), sub[1].toUpperCase());
 				
-				textArea.setText(String.format("parola aggiunta: %s traduzione: %s",sub[0].toUpperCase(),sub[1])); 
+				textArea.setText(String.format("PAROLA AGGIUNTA: %s -> %s",sub[0].toUpperCase(),sub[1]).toUpperCase());
 			}
 			else 
 			{
@@ -65,11 +66,13 @@ public class FXMLController
 			Parola output = this.model.traduci(input);
 			textArea.setText(String.format("PAROLA CERCATA: %s,\nTRADUZIONE: %s", input, output != null ? output.getTraduzione() : "TRADUZIONE NON TROVATA")); 
 		}
+		txtInput.clear();
 	}
 	@FXML
 	private void doElencoParole()
 	{
 		textArea.setText("DIZIONARIO:\n" + this.model.elencoParole()); 
+		txtInput.clear();
 	}
 
 	@FXML

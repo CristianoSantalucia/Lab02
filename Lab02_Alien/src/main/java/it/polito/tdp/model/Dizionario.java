@@ -1,5 +1,6 @@
 package it.polito.tdp.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,8 +34,11 @@ public class Dizionario
 	
 	public String elencoParole()
 	{
+		ArrayList<String> lista = new ArrayList<>(this.parole.keySet());
+		lista.sort((s1,s2)->s1.compareTo(s2));
+		
 		String s = "";
-		for (String key : this.parole.keySet())
+		for (String key : lista)
 			s += String.format("- %s -> %s\n",key,this.parole.get(key).traduzione);
 		return s;
 	}
