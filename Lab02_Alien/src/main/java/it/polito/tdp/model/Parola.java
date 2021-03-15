@@ -1,6 +1,6 @@
 package it.polito.tdp.model;
 
-import java.util.List;
+//import java.util.List;
 
 public class Parola
 {
