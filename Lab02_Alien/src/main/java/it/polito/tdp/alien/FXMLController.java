@@ -57,23 +57,29 @@ public class FXMLController
 				textArea.setText(String.format("PAROLA AGGIUNTA: %s -> %s",sub[0],sub[1]));
 			}
 			else 
-			{
 				textArea.setText("FORMATO TESTO INPUT ERRATO!!"); 
-			}
 		}
 		//cerca traduzione
 		else
 		{
 			textArea.setText(String.format(" PAROLA CERCATA: %s\n -> TRADUZIONI: ", input));
+
+			if(input.contains("?"))
+			{
+				List<String> list = this.model.cercaParola(input);
+				for (String	trovato : list)
+				{
+					List<String> output = this.model.traduci(trovato);
+					textArea.appendText(""+output);
+					return;
+				}
+			} 
+			
 			List<String> output = this.model.traduci(input);
-			System.out.println(output);
 			if(output == null)
 				textArea.appendText("ANCORA NESSUNA TRADUZIONE PRESENTE!"); 
 			else for (String s : output)
-			{
-				
 				textArea.appendText("\n- " + s); 
-			}
 		}
 		txtInput.clear();
 	}

@@ -36,6 +36,16 @@ public class Dizionario
 		return this.parole.get(input);
 	}
 	
+	public List<String> cercaParola(String s)
+	{
+		List<String> result = new ArrayList<>(); 
+		String[] sub = s.split("\\?");
+		for (String str : this.parole.keySet())
+			if((str.contains(sub[0]) || str.contains(sub[1])))
+				result.add(str);
+		return result;
+	}
+	
 	public String stampa()
 	{
 		ArrayList<String> keys = new ArrayList<>(this.parole.keySet());
@@ -47,7 +57,7 @@ public class Dizionario
 		{
 			ArrayList<String> traduzioni = new ArrayList<>(this.parole.get(key));
 			traduzioni.sort((s1,s2)->s1.compareTo(s2));
-			s += "- " + key + ": ";
+			s += "\n- " + key + ": ";
 			for (String trad : traduzioni)
 			{
 				s.trim();
