@@ -2,6 +2,7 @@ package it.polito.tdp.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Map;
  */
 public class Dizionario
 {
-	Map<String,Parola> parole;
+	Map<String,List<String>> parole;
 	
 	public Dizionario()
 	{
@@ -19,7 +20,10 @@ public class Dizionario
 
 	public void addWord(String alienWord, String translation) 
 	{
-		this.parole.put(alienWord,new Parola(alienWord, translation));
+		if(this.parole.get(alienWord) == null)
+			this.parole.put(alienWord, new ArrayList<String>());
+		if(!this.parole.get(alienWord).contains(translation))
+			this.parole.get(alienWord).add(translation);
 	}
 
 	public void reset()
@@ -27,19 +31,29 @@ public class Dizionario
 		this.parole.clear();
 	}
 
-	public Parola traduci(String input)
+	public List<String> traduci(String input)
 	{
 		return this.parole.get(input);
 	}
 	
-	public String elencoParole()
+	public String stampa()
 	{
-		ArrayList<String> lista = new ArrayList<>(this.parole.keySet());
-		lista.sort((s1,s2)->s1.compareTo(s2));
+		ArrayList<String> keys = new ArrayList<>(this.parole.keySet());
+		keys.sort((s1,s2)->s1.compareTo(s2));
 		
-		String s = "";
-		for (String key : lista)
-			s += String.format("- %s -> %s\n",key,this.parole.get(key).traduzione);
-		return s;
-	}
+		String s = "\n";
+		
+		for (String key : keys)
+		{
+			ArrayList<String> traduzioni = new ArrayList<>(this.parole.get(key));
+			traduzioni.sort((s1,s2)->s1.compareTo(s2));
+			s += "- " + key + ": ";
+			for (String trad : traduzioni)
+			{
+				s.trim();
+				s += trad + ", ";
+			}
+		}
+		return s.isEmpty() ? "\nDIZIONARIO VUOTO!" : (s.substring(0,s.length()-2) + ";");
+	} 
 }

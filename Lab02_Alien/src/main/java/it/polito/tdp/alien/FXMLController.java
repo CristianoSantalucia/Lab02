@@ -1,10 +1,10 @@
 package it.polito.tdp.alien;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.model.Dizionario;
-import it.polito.tdp.model.Parola;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,7 +38,8 @@ public class FXMLController
 	@FXML
 	void doTranslate(ActionEvent event)
 	{
-		String input = txtInput.getText();
+		String input = txtInput.getText().toLowerCase();
+		input.trim();
 		
 		//TODO: controlla validita testo
 		
@@ -51,9 +52,9 @@ public class FXMLController
 			
 			if(sub.length == 2 && !sub[0].equals("") && !sub[1].equals(""))
 			{
-				model.addWord(sub[0].toUpperCase(), sub[1].toUpperCase());
+				model.addWord(sub[0], sub[1]);
 				
-				textArea.setText(String.format("PAROLA AGGIUNTA: %s -> %s",sub[0].toUpperCase(),sub[1]).toUpperCase());
+				textArea.setText(String.format("PAROLA AGGIUNTA: %s -> %s",sub[0],sub[1]));
 			}
 			else 
 			{
@@ -63,15 +64,23 @@ public class FXMLController
 		//cerca traduzione
 		else
 		{
-			Parola output = this.model.traduci(input);
-			textArea.setText(String.format("PAROLA CERCATA: %s,\nTRADUZIONE: %s", input, output != null ? output.getTraduzione() : "TRADUZIONE NON TROVATA")); 
+			textArea.setText(String.format(" PAROLA CERCATA: %s\n -> TRADUZIONI: ", input));
+			List<String> output = this.model.traduci(input);
+			System.out.println(output);
+			if(output == null)
+				textArea.appendText("ANCORA NESSUNA TRADUZIONE PRESENTE!"); 
+			else for (String s : output)
+			{
+				
+				textArea.appendText("\n- " + s); 
+			}
 		}
 		txtInput.clear();
 	}
 	@FXML
 	private void doElencoParole()
 	{
-		textArea.setText("DIZIONARIO:\n" + this.model.elencoParole()); 
+		textArea.setText("DIZIONARIO:\n" + this.model.stampa()); 
 		txtInput.clear();
 	}
 
@@ -81,7 +90,6 @@ public class FXMLController
 		assert txtInput != null : "fx:id=\"txtInput\" was not injected: check your FXML file 'Scene.fxml'.";
 		assert btnTranslate != null : "fx:id=\"btnTranslate\" was not injected: check your FXML file 'Scene.fxml'.";
 		assert textArea != null : "fx:id=\"textArea\" was not injected: check your FXML file 'Scene.fxml'.";
-
 	}
 
 	public void setModel(Dizionario model)
